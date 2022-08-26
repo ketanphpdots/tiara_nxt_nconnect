@@ -71,4 +71,9 @@ class MethodChannelTiaraNxtNConnect extends TiaraNxtNConnectPlatform {
   Future<bool> isScanning() async {
     return await methodChannel.invokeMethod('isScanning') as bool;
   }
+
+  @override
+  Future<void> registerListener() async {
+    await methodChannel.invokeMethod('registerListener');
+  }
 }

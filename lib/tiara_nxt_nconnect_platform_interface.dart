@@ -105,4 +105,9 @@ abstract class TiaraNxtNConnectPlatform extends PlatformInterface {
   Future<bool> isScanning() async {
     throw UnimplementedError('isScanning() has not been implemented.');
   }
+
+  /// This method will register the instance of the event listener to which will be invoked whenever a tag is scanned. Similarly there are methods to remove a single listener or to remove all listeners.
+  Future<void> registerListener() async {
+    throw UnimplementedError('registerListener() has not been implemented.');
+  }
 }
