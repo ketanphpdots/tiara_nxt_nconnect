@@ -8,6 +8,8 @@ import android.content.*
 import android.content.pm.PackageManager
 import android.os.IBinder
 import androidx.core.app.ActivityCompat
+import com.neotechid.nconnect.ReaderEvent
+import com.neotechid.nconnect.RfidEventListener
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
@@ -83,6 +85,10 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             }
             "isScanning" -> {
                 result.success(isScanning())
+            }
+            "registerListener" -> {
+                // TODO: can also call this method with getRfidReader
+                result.success(registerListener())
             }
         }
     }
@@ -199,6 +205,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             rfidReader =
                 rfidFactory.getRfidReader(args[0], args[1], "android")
             rfidReader.connect()
+            // TODO: can also register listener over here instead of calling separately
             true
         } catch (e: Exception) {
             println(e.toString())
@@ -247,4 +254,36 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private fun isScanning(): Boolean {
         return rfidReader.isScanning
     }
+
+    private val rfidEventListener = object : RfidEventListener {
+        override fun handleData(tagData: String?, antennaId: Int, scanDistance: Int) {
+            println("Read TAG: $tagData\tAntenna ID: $antennaId\tScan Distance: $scanDistance")
+        }
+
+        override fun handleError(errorMessage: String?) {
+            println("Error: $errorMessage")
+        }
+
+        override fun handleReaderEvent(p0: ReaderEvent?) {
+            println("TODO(\"Not yet implemented\")")
+        }
+
+        override fun handleReaderEvent(p0: ReaderEvent?, p1: String?) {
+            println("TODO(\"Not yet implemented\")")
+        }
+
+        override fun setEnabled(p0: Boolean) {
+            println("TODO(\"Not yet implemented\")")
+        }
+
+        override fun isEnabled(): Boolean {
+            println("TODO(\"Not yet implemented\")")
+            return false
+        }
+    }
+
+    private fun registerListener() {
+        rfidReader.registerListener(rfidEventListener)
+    }
+
 }
