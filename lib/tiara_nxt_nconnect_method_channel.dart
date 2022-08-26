@@ -31,4 +31,44 @@ class MethodChannelTiaraNxtNConnect extends TiaraNxtNConnectPlatform {
   Future<int> getBatteryLevel() async {
     return await methodChannel.invokeMethod('getBatteryLevel') as int;
   }
+
+  @override
+  Future<bool> startScan() async {
+    return await methodChannel.invokeMethod('startScan') as bool;
+  }
+
+  @override
+  Future<bool> stopScan() async {
+    return await methodChannel.invokeMethod('stopScan') as bool;
+  }
+
+  @override
+  Future<void> setPower(double power) async {
+    return await methodChannel.invokeMethod('setPower', power);
+  }
+
+  @override
+  Future<double> getPower() async {
+    return await methodChannel.invokeMethod('getPower') as double;
+  }
+
+  @override
+  Future<void> setScanSpeed(int speed) async {
+    return await methodChannel.invokeMethod('setScanSpeed', speed);
+  }
+
+  @override
+  Future<int> getScanSpeed() async {
+    return await methodChannel.invokeMethod('getScanSpeed') as int;
+  }
+
+  @override
+  Future<int> writeToTag(String data) async {
+    return await methodChannel.invokeMethod('writeToTag', data);
+  }
+
+  @override
+  Future<bool> isScanning() async {
+    return await methodChannel.invokeMethod('isScanning') as bool;
+  }
 }
