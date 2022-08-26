@@ -1,0 +1,5 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.tiara_nxt.tiara_nxt_nconnect">
+
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+</manifest>
