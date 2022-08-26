@@ -58,10 +58,31 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 result.success(getRfidReader(call.arguments as List<String>))
             }
             "getBatteryLevel" -> {
-                result.success(
-                    getBatteryLevel
-                        ()
-                )
+                result.success(getBatteryLevel())
+            }
+            "startScan" -> {
+                result.success(startScan())
+            }
+            "stopScan" -> {
+                result.success(stopScan())
+            }
+            "setPower" -> {
+                result.success(setPower(call.arguments as Double))
+            }
+            "getPower" -> {
+                result.success(getPower())
+            }
+            "setScanSpeed" -> {
+                result.success(setScanSpeed(call.arguments as Int))
+            }
+            "getScanSpeed" -> {
+                result.success(getScanSpeed())
+            }
+            "writeToTag" -> {
+                result.success(writeToTag(call.arguments as String))
+            }
+            "isScanning" -> {
+                result.success(isScanning())
             }
         }
     }
@@ -193,5 +214,37 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             println(e.toString())
             -1
         }
+    }
+
+    private fun startScan(): Boolean {
+        return rfidReader.startScan()
+    }
+
+    private fun stopScan(): Boolean {
+        return rfidReader.stopScan()
+    }
+
+    private fun setPower(power: Double) {
+        rfidReader.power = power
+    }
+
+    private fun getPower(): Double {
+        return rfidReader.power
+    }
+
+    private fun setScanSpeed(speed: Int) {
+        rfidReader.scanSpeed = speed
+    }
+
+    private fun getScanSpeed(): Int {
+        return rfidReader.scanSpeed
+    }
+
+    private fun writeToTag(data: String): Int {
+        return rfidReader.writeToTag(data)
+    }
+
+    private fun isScanning(): Boolean {
+        return rfidReader.isScanning
     }
 }
