@@ -22,6 +22,6 @@ flutter:
     platforms:
       android:
         package: com.tiara_nxt.tiara_nxt_nconnect
-        pluginClass: TiaraNxtNconnectPlugin
+        pluginClass: TiaraNxtNConnectPlugin
       ios:
-        pluginClass: TiaraNxtNconnectPlugin
+        pluginClass: TiaraNxtNConnectPlugin
