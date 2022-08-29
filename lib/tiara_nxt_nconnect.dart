@@ -1,5 +1,7 @@
-import 'src/models/Events.dart';
+import 'src/models/events.dart';
 import 'tiara_nxt_nconnect_platform_interface.dart';
+
+export 'src/models/events.dart';
 
 class TiaraNxtNConnect {
   final _methodChannelInstance = TiaraNxtNConnectPlatform.methodChannelInstance;

@@ -1,7 +1,6 @@
 import 'package:flutter/services.dart';
 
-import 'src/models/Events.dart';
-import 'src/models/annonymous_event.dart';
+import 'src/models/events.dart';
 import 'tiara_nxt_nconnect_platform_interface.dart';
 
 /// An implementation of [TiaraNxtNConnectPlatform] that uses event channels.
