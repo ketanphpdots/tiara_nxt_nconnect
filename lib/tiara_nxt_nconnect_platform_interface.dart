@@ -1,6 +1,8 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
+import 'src/models/Events.dart';
 import 'tiara_nxt_nconnect_method_channel.dart';
+import 'tiara_nxt_nconnect_event_channel.dart';
 
 abstract class TiaraNxtNConnectPlatform extends PlatformInterface {
   /// Constructs a TiaraNxtNconnectPlatform.
@@ -8,19 +10,27 @@ abstract class TiaraNxtNConnectPlatform extends PlatformInterface {
 
   static final Object _token = Object();
 
-  static TiaraNxtNConnectPlatform _instance = MethodChannelTiaraNxtNConnect();
+  static TiaraNxtNConnectPlatform _methodChannelInstance =
+      MethodChannelTiaraNxtNConnect();
 
   /// The default instance of [TiaraNxtNConnectPlatform] to use.
   ///
   /// Defaults to [MethodChannelTiaraNxtNConnect].
-  static TiaraNxtNConnectPlatform get instance => _instance;
+  static TiaraNxtNConnectPlatform get methodChannelInstance =>
+      _methodChannelInstance;
+
+  static final TiaraNxtNConnectPlatform _eventChannelInstance =
+      EventChannelTiaraNxtNConnect();
+
+  static TiaraNxtNConnectPlatform get eventChannelInstance =>
+      _eventChannelInstance;
 
   /// Platform-specific implementations should set this with their own
   /// platform-specific class that extends [TiaraNxtNConnectPlatform] when
   /// they register themselves.
-  static set instance(TiaraNxtNConnectPlatform instance) {
+  static set methodChannelInstance(TiaraNxtNConnectPlatform instance) {
     PlatformInterface.verifyToken(instance, _token);
-    _instance = instance;
+    _methodChannelInstance = instance;
   }
 
   /// This method is used to check plugin integration with platform
@@ -109,5 +119,9 @@ abstract class TiaraNxtNConnectPlatform extends PlatformInterface {
   /// This method will register the instance of the event listener to which will be invoked whenever a tag is scanned. Similarly there are methods to remove a single listener or to remove all listeners.
   Future<void> registerListener() async {
     throw UnimplementedError('registerListener() has not been implemented.');
+  }
+
+  Stream<Event> getEventStream() {
+    throw UnimplementedError('getEventStream() has not been implemented');
   }
 }
