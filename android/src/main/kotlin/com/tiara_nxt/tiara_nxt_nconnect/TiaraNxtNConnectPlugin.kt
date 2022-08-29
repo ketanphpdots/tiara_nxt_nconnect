@@ -23,6 +23,8 @@ import com.neotechid.nconnect.bluetooth.AndroidBleConnector
 import com.neotechid.nconnect.bluetooth.AndroidBluetoothConnector
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.plugin.common.EventChannel
+import org.json.JSONObject
 
 /** TiaraNxtNConnectPlugin */
 class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
@@ -30,19 +32,19 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private lateinit var context: Context
     private lateinit var activity: Activity
 
-    /// The MethodChannel that will the communication between Flutter and native Android
-    ///
-    /// This local reference serves to register the plugin with the Flutter Engine and unregister it
-    /// when the Flutter Engine is detached from the Activity
     private lateinit var channel: MethodChannel
 
-    private val rfidFactory: RfidFactory = RfidFactory.getInstance()
+    private lateinit var eventChannel : EventChannel
+    private var eventSink: EventChannel.EventSink? = null
 
+    private val rfidFactory: RfidFactory = RfidFactory.getInstance()
     private lateinit var rfidReader: RfidReader
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "tiara_nxt_nconnect")
         channel.setMethodCallHandler(this)
+        eventChannel = EventChannel(flutterPluginBinding.binaryMessenger, "tiara_nxt_nconnect/events")
+        eventChannel.setStreamHandler(rfidEventStreamHandler)
         context = flutterPluginBinding.applicationContext
     }
 
@@ -57,7 +59,11 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 result.success(null)
             }
             "getRfidReader" -> {
-                result.success(getRfidReader(call.arguments as List<String>))
+                val success : Boolean = getRfidReader(call.arguments as List<String>)
+                if(success) {
+                    registerListener()
+                }
+                result.success(success)
             }
             "getBatteryLevel" -> {
                 result.success(getBatteryLevel())
@@ -88,8 +94,18 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             }
             "registerListener" -> {
                 // TODO: can also call this method with getRfidReader
-                result.success(registerListener())
+
             }
+        }
+    }
+
+    private val rfidEventStreamHandler = object : EventChannel.StreamHandler {
+        override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+            eventSink = events
+        }
+
+        override fun onCancel(arguments: Any?) {
+            eventSink = null
         }
     }
 
@@ -258,17 +274,37 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private val rfidEventListener = object : RfidEventListener {
         override fun handleData(tagData: String?, antennaId: Int, scanDistance: Int) {
             println("Read TAG: $tagData\tAntenna ID: $antennaId\tScan Distance: $scanDistance")
+            val response = HashMap<String, Any?>()
+            response["event"] = "handleData"
+            response["readTag"] = tagData
+            response["antennaId"] = antennaId
+            response["scanDistance"] = scanDistance
+            val data = JSONObject(response).toString()
+            eventSink?.success(data)
+            eventSink?.success("[handleData] Read TAG: $tagData\tAntenna ID: $antennaId\tScan Distance: $scanDistance")
         }
 
         override fun handleError(errorMessage: String?) {
             println("Error: $errorMessage")
+            val response = HashMap<String, Any?>()
+            response["event"] = "handleError"
+            response["error"] = errorMessage
+            val data = JSONObject(response).toString()
+            eventSink?.success(data)
+            eventSink?.success("[handleError] Error: $errorMessage")
         }
 
-        override fun handleReaderEvent(p0: ReaderEvent?) {
-            println("TODO(\"Not yet implemented\")")
+        override fun handleReaderEvent(readerEvent: ReaderEvent?) {
+            println("Reader Event: $readerEvent")
+            val response = HashMap<String, Any?>()
+            response["event"] = "handleReaderEvent"
+            response["readerEvent"] = readerEvent.toString()
+            val data = JSONObject(response).toString()
+            eventSink?.success(data)
+            eventSink?.success("[handleReaderEvent] Reader Event: $readerEvent")
         }
 
-        override fun handleReaderEvent(p0: ReaderEvent?, p1: String?) {
+        override fun handleReaderEvent(readerEvent: ReaderEvent?, p1: String?) {
             println("TODO(\"Not yet implemented\")")
         }
 
