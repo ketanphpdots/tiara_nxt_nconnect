@@ -18,7 +18,7 @@
     <uses-feature android:name="android.hardware.bluetooth" android:required="true"/>
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
 
-    <service android:name="com.neotechid.nconnect.bluetooth.AndroidBluetoothConnector" />
-    <service android:name="com.neotechid.nconnect.bluetooth.AndroidBleConnector" />
-    
+    <!-- <service android:name="com.neotechid.nconnect.bluetooth.AndroidBluetoothConnector" />
+    <service android:name="com.neotechid.nconnect.bluetooth.AndroidBleConnector" /> -->
+
 </manifest>
