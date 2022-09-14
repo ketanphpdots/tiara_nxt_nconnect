@@ -1,8 +1,10 @@
 import 'src/models/events.dart';
-import 'tiara_nxt_nconnect_platform_interface.dart';
+import 'src/tiara_nxt_nconnect_platform_interface.dart';
 
 export 'src/models/events.dart';
 export 'src/enums/device_type.dart';
+export 'src/enums/device_feature.dart';
+export 'src/models/device.dart';
 
 class TiaraNxtNConnect {
   final _methodChannelInstance = TiaraNxtNConnectPlatform.methodChannelInstance;

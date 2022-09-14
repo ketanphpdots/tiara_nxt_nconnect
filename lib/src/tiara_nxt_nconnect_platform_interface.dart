@@ -1,6 +1,6 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import 'src/models/Events.dart';
+import 'models/Events.dart';
 import 'tiara_nxt_nconnect_method_channel.dart';
 import 'tiara_nxt_nconnect_event_channel.dart';
 
