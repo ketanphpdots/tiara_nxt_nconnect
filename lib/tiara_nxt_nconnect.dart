@@ -84,10 +84,10 @@ class TiaraNxtNConnect {
     return await _methodChannelInstance.isScanning();
   }
 
-  /// This method will register the instance of the event listener to which will be invoked whenever a tag is scanned. Similarly there are methods to remove a single listener or to remove all listeners.
-  Future<void> registerListener() async {
-    return await _methodChannelInstance.registerListener();
-  }
+  // /// This method will register the instance of the event listener to which will be invoked whenever a tag is scanned. Similarly there are methods to remove a single listener or to remove all listeners.
+  // Future<void> registerListener() async {
+  //   return await _methodChannelInstance.registerListener();
+  // }
 
   Stream<Event> getEventStrem() {
     return _eventChannelInstance.getEventStream();
