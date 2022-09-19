@@ -92,10 +92,6 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "isScanning" -> {
                 result.success(isScanning())
             }
-            "registerListener" -> {
-                // TODO: can also call this method with getRfidReader
-
-            }
         }
     }
 
@@ -114,15 +110,15 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
-        TODO("Not yet implemented")
+        println("[onDetachedFromActivityForConfigChanges] TODO(\"Not yet implemented\")")
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-        TODO("Not yet implemented")
+        println("[onReattachedToActivityForConfigChanges] TODO(\"Not yet implemented\")")
     }
 
     override fun onDetachedFromActivity() {
-        TODO("Not yet implemented")
+        println("[onDetachedFromActivity] TODO(\"Not yet implemented\")")
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
@@ -221,7 +217,6 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             rfidReader =
                 rfidFactory.getRfidReader(args[0], args[1], "android")
             rfidReader.connect()
-            // TODO: can also register listener over here instead of calling separately
             true
         } catch (e: Exception) {
             println(e.toString())
@@ -305,16 +300,16 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         }
 
         override fun handleReaderEvent(readerEvent: ReaderEvent?, p1: String?) {
-            println("TODO(\"Not yet implemented\")")
+            println("[handleReaderEvent] TODO(\"Not yet implemented\")")
         }
 
         override fun setEnabled(p0: Boolean) {
-            println("TODO(\"Not yet implemented\")")
+            println("[setEnabled] TODO(\"Not yet implemented\")")
         }
 
         override fun isEnabled(): Boolean {
-            println("TODO(\"Not yet implemented\")")
-            return false
+            // return true, as guided by Neha ma'am
+            return true
         }
     }
 
