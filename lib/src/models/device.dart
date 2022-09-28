@@ -38,7 +38,7 @@ class Device {
     await _prefs!.setString('devices.$addr', json.encode(toJson()));
   }
 
-  Future<List<String>> getPairedDevicesAddr() async {
+  static Future<List<String>> getPairedDevicesAddr() async {
     _prefs ??= await SharedPreferences.getInstance();
     return _prefs!.getStringList('devices') ?? [];
   }
