@@ -64,4 +64,12 @@ class Device {
     this.features = features;
     save();
   }
+
+  @override
+  int get hashCode => addr.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    return other is Device && other.addr == addr;
+  }
 }
