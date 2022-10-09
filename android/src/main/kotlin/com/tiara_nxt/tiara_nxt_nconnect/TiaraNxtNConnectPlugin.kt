@@ -38,7 +38,8 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private var eventSink: EventChannel.EventSink? = null
 
     private val rfidFactory: RfidFactory = RfidFactory.getInstance()
-    private lateinit var rfidReader: RfidReader
+
+    private lateinit var stringToRfidReaderMap: HashMap<String, RfidReader>
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "tiara_nxt_nconnect")
@@ -60,38 +61,64 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 result.success(null)
             }
             "getRfidReader" -> {
-                val success: Boolean = getRfidReader(call.arguments as List<String>)
-                if (success) {
-                    registerListener()
-                }
+                val args = call.arguments as Map<String, *>
+                val make = args["make"] as String
+                val mac = args["mac"] as String
+                val success: Boolean = getRfidReader(make, mac)
                 result.success(success)
             }
             "getBatteryLevel" -> {
-                result.success(getBatteryLevel())
+                val args = call.arguments as Map<String, *>
+                val mac = args["mac"] as String
+                result.success(getBatteryLevel(mac))
             }
             "startScan" -> {
-                result.success(startScan())
+                val args = call.arguments as Map<String, *>
+                val mac = args["mac"] as String
+                result.success(startScan(mac))
             }
             "stopScan" -> {
-                result.success(stopScan())
+                val args = call.arguments as Map<String, *>
+                val mac = args["mac"] as String
+                result.success(stopScan(mac))
             }
             "setPower" -> {
-                result.success(setPower(call.arguments as Double))
+                val args = call.arguments as Map<String, *>
+                val mac = args["mac"] as String
+                val power = args["power"] as Double
+                result.success(setPower(mac, power))
             }
             "getPower" -> {
-                result.success(getPower())
+                val args = call.arguments as Map<String, *>
+                val mac = args["mac"] as String
+                result.success(getPower(mac))
             }
             "setScanSpeed" -> {
-                result.success(setScanSpeed(call.arguments as Int))
+                val args = call.arguments as Map<String, *>
+                val mac = args["mac"] as String
+                val speed = args["speed"] as Int
+                result.success(setScanSpeed(mac, speed))
             }
             "getScanSpeed" -> {
-                result.success(getScanSpeed())
+                val args = call.arguments as Map<String, *>
+                val mac = args["mac"] as String
+                result.success(getScanSpeed(mac))
             }
             "writeToTag" -> {
-                result.success(writeToTag(call.arguments as String))
+                val args = call.arguments as Map<String, *>
+                val mac = args["mac"] as String
+                val data = args["data"] as String
+                result.success(writeToTag(mac, data))
             }
             "isScanning" -> {
-                result.success(isScanning())
+                val args = call.arguments as Map<String, *>
+                val mac = args["mac"] as String
+                result.success(isScanning(mac))
+            }
+            "disconnect" -> {
+                val args = call.arguments as Map<String, *>
+                val mac = args["mac"] as String
+                result.success(disconnect(mac))
             }
         }
     }
@@ -99,8 +126,6 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private val rfidEventStreamHandler = object : EventChannel.StreamHandler {
         override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
             eventSink = events
-//            eventSink?.success("[eventSink] SuCcEsS") // working
-//            events?.success("[events] sUcCeSs") // working
         }
 
         override fun onCancel(arguments: Any?) {
@@ -173,7 +198,6 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         override fun onServiceDisconnected(p0: ComponentName?) {
             println("[onServiceDisconnected] $p0")
         }
-
     }
 
     private fun startBLEService() {
@@ -215,11 +239,14 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         }
     }
 
-    private fun getRfidReader(args: List<String>): Boolean {
+    private fun getRfidReader(make: String, mac: String): Boolean {
         return try {
-            rfidReader =
-                rfidFactory.getRfidReader(args[0], args[1], "android")
-            rfidReader.connect()
+            if (!stringToRfidReaderMap.containsKey(mac)) {
+                val newRfidReader = rfidFactory.getRfidReader(make, mac, "android")
+                newRfidReader.connect()
+                newRfidReader.registerListener(getRfidEventListener(mac))
+                stringToRfidReaderMap[mac] = newRfidReader
+            }
             true
         } catch (e: Exception) {
             println(e.toString())
@@ -227,103 +254,132 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         }
     }
 
-    private fun getBatteryLevel(): Int {
+    private fun getBatteryLevel(mac: String): Int {
         return try {
-            val batteryLevel = rfidReader.batteryLevel
-            batteryLevel
+            if (stringToRfidReaderMap.containsKey(mac)) {
+                return stringToRfidReaderMap[mac]!!.batteryLevel
+            }
+            return -1
         } catch (e: Exception) {
             println(e.toString())
             -1
         }
     }
 
-    private fun startScan(): Boolean {
-        return rfidReader.startScan()
-    }
-
-    private fun stopScan(): Boolean {
-        return rfidReader.stopScan()
-    }
-
-    private fun setPower(power: Double) {
-        rfidReader.power = power
-    }
-
-    private fun getPower(): Double {
-        return rfidReader.power
-    }
-
-    private fun setScanSpeed(speed: Int) {
-        rfidReader.scanSpeed = speed
-    }
-
-    private fun getScanSpeed(): Int {
-        return rfidReader.scanSpeed
-    }
-
-    private fun writeToTag(data: String): Int {
-        return rfidReader.writeToTag(data)
-    }
-
-    private fun isScanning(): Boolean {
-        return rfidReader.isScanning
-    }
-
-    private val rfidEventListener = object : RfidEventListener {
-        override fun handleData(tagData: String?, antennaId: Int, scanDistance: Int) {
-            println("[handleData] Read TAG: $tagData\tAntenna ID: $antennaId\tScan Distance: $scanDistance")
-            val response = HashMap<String, Any?>()
-            response["event"] = "handleData"
-            response["readTag"] = tagData
-            response["antennaId"] = antennaId
-            response["scanDistance"] = scanDistance
-            val data = JSONObject(response).toString()
-            eventSink?.success(data)
-//            eventSink?.success("[handleData] Read TAG: $tagData\tAntenna ID: $antennaId\tScan Distance: $scanDistance")
+    private fun startScan(mac: String): Boolean {
+        if (stringToRfidReaderMap.containsKey(mac)) {
+            return stringToRfidReaderMap[mac]!!.startScan()
         }
+        return false
+    }
 
-        override fun handleError(errorMessage: String?) {
-            println("[handleError] Error: $errorMessage")
-            val response = HashMap<String, Any?>()
-            response["event"] = "handleError"
-            response["error"] = errorMessage
-            val data = JSONObject(response).toString()
-            eventSink?.success(data)
-//            eventSink?.success("[handleError] Error: $errorMessage")
+    private fun stopScan(mac: String): Boolean {
+        if (stringToRfidReaderMap.containsKey(mac)) {
+            return stringToRfidReaderMap[mac]!!.stopScan()
         }
+        return false
+    }
 
-        override fun handleReaderEvent(readerEvent: ReaderEvent?) {
-            println("[handleReaderEvent] Reader Event: $readerEvent")
-            val response = HashMap<String, Any?>()
-            response["event"] = "handleReaderEvent"
-            response["readerEvent"] = readerEvent.toString()
-            val data = JSONObject(response).toString()
-            eventSink?.success(data)
-//            eventSink?.success("[handleReaderEvent] Reader Event: $readerEvent")
-        }
-
-        override fun handleReaderEvent(readerEvent: ReaderEvent?, p1: String?) {
-            println("[handleReaderEvent] Reader Event: $readerEvent\tP1: $p1")
-            val response = HashMap<String, Any?>()
-            response["event"] = "handleReaderEvent"
-            response["readerEvent"] = readerEvent.toString()
-            response["p1"] = p1
-            val data = JSONObject(response).toString()
-            eventSink?.success(data)
-        }
-
-        override fun setEnabled(p0: Boolean) {
-            println("[setEnabled] TODO(\"Not yet implemented\")")
-        }
-
-        override fun isEnabled(): Boolean {
-            // return true, as guided by Neha ma'am
-            return true
+    private fun setPower(mac: String, power: Double) {
+        if (stringToRfidReaderMap.containsKey(mac)) {
+            stringToRfidReaderMap[mac]!!.power = power
         }
     }
 
-    private fun registerListener() {
-        rfidReader.registerListener(rfidEventListener)
+    private fun getPower(mac: String): Double {
+        if (stringToRfidReaderMap.containsKey(mac)) {
+            return stringToRfidReaderMap[mac]!!.power
+        }
+        return -1.0
     }
 
+    private fun setScanSpeed(mac: String, speed: Int) {
+        if (stringToRfidReaderMap.containsKey(mac)) {
+            stringToRfidReaderMap[mac]!!.scanSpeed = speed
+        }
+    }
+
+    private fun getScanSpeed(mac: String): Int {
+        if (stringToRfidReaderMap.containsKey(mac)) {
+            return stringToRfidReaderMap[mac]!!.scanSpeed
+        }
+        return -1
+    }
+
+    private fun writeToTag(mac: String, data: String): Int {
+        if (stringToRfidReaderMap.containsKey(mac)) {
+            stringToRfidReaderMap[mac]!!.writeToTag(data)
+        }
+        return -1
+    }
+
+    private fun isScanning(mac: String): Boolean {
+        if (stringToRfidReaderMap.containsKey(mac)) {
+            return stringToRfidReaderMap[mac]!!.isScanning
+        }
+        return false
+    }
+
+    private fun disconnect(mac: String): Boolean {
+        if (stringToRfidReaderMap.containsKey(mac)) {
+            return stringToRfidReaderMap[mac]!!.disconnect()
+        }
+        return false
+    }
+
+    private fun getRfidEventListener(mac: String): RfidEventListener {
+        val rfidEventListener = object : RfidEventListener {
+            override fun handleData(tagData: String?, antennaId: Int, scanDistance: Int) {
+                println("[handleData] Read TAG: $tagData\tAntenna ID: $antennaId\tScan Distance: $scanDistance")
+                val response = HashMap<String, Any?>()
+                response["event"] = "handleData"
+                response["readerMac"] = mac
+                response["readTag"] = tagData
+                response["antennaId"] = antennaId
+                response["scanDistance"] = scanDistance
+                val data = JSONObject(response).toString()
+                eventSink?.success(data)
+            }
+
+            override fun handleError(errorMessage: String?) {
+                println("[handleError] Error: $errorMessage")
+                val response = HashMap<String, Any?>()
+                response["event"] = "handleError"
+                response["readerMac"] = mac
+                response["error"] = errorMessage
+                val data = JSONObject(response).toString()
+                eventSink?.success(data)
+            }
+
+            override fun handleReaderEvent(readerEvent: ReaderEvent?) {
+                println("[handleReaderEvent] Reader Event: $readerEvent")
+                val response = HashMap<String, Any?>()
+                response["event"] = "handleReaderEvent"
+                response["readerMac"] = mac
+                response["readerEvent"] = readerEvent.toString()
+                val data = JSONObject(response).toString()
+                eventSink?.success(data)
+            }
+
+            override fun handleReaderEvent(readerEvent: ReaderEvent?, p1: String?) {
+                println("[handleReaderEvent] Reader Event: $readerEvent\tP1: $p1")
+                val response = HashMap<String, Any?>()
+                response["event"] = "handleReaderEvent"
+                response["readerEvent"] = readerEvent.toString()
+                response["p1"] = p1
+                val data = JSONObject(response).toString()
+                eventSink?.success(data)
+            }
+
+            override fun setEnabled(p0: Boolean) {
+                println("[setEnabled] TODO(\"Not yet implemented\")")
+            }
+
+            override fun isEnabled(): Boolean {
+                // return true, as guided by Neha ma'am
+                return true
+            }
+        }
+        return rfidEventListener
+    }
 }
