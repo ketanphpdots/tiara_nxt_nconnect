@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../enums/device_feature.dart';
-import '../enums/device_type.dart';
+import '../../enums/device_feature.dart';
+import '../../enums/device_type.dart';
 
 part 'device.g.dart';
 
@@ -12,7 +12,7 @@ part 'device.g.dart';
 class Device {
   final DeviceType type;
   final String name;
-  final String addr;
+  final String mac;
   List<DeviceFeature> features;
 
   static SharedPreferences? _prefs;
@@ -20,7 +20,7 @@ class Device {
   Device({
     required this.type,
     required this.name,
-    required this.addr,
+    required this.mac,
     required this.features,
   });
 
@@ -31,11 +31,11 @@ class Device {
   Future save() async {
     _prefs ??= await SharedPreferences.getInstance();
     final pairedDevices = _prefs!.getStringList('devices') ?? [];
-    if (!pairedDevices.contains(addr)) {
-      pairedDevices.add(addr);
+    if (!pairedDevices.contains(mac)) {
+      pairedDevices.add(mac);
       await _prefs!.setStringList('devices', pairedDevices);
     }
-    await _prefs!.setString('devices.$addr', json.encode(toJson()));
+    await _prefs!.setString('devices.$mac', json.encode(toJson()));
   }
 
   static Future<List<String>> getPairedDevicesAddr() async {
@@ -55,9 +55,9 @@ class Device {
   Future delete() async {
     _prefs ??= await SharedPreferences.getInstance();
     final pairedDevices = _prefs!.getStringList('devices') ?? [];
-    pairedDevices.removeWhere((element) => element == addr);
+    pairedDevices.removeWhere((element) => element == mac);
     await _prefs!.setStringList('devices', pairedDevices);
-    await _prefs!.remove('devices.$addr');
+    await _prefs!.remove('devices.$mac');
   }
 
   Future setFeatures(List<DeviceFeature> features) async {
@@ -66,10 +66,10 @@ class Device {
   }
 
   @override
-  int get hashCode => addr.hashCode;
+  int get hashCode => mac.hashCode;
 
   @override
   bool operator ==(Object other) {
-    return other is Device && other.addr == addr;
+    return other is Device && other.mac == mac;
   }
 }

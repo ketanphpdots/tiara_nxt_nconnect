@@ -9,7 +9,7 @@ part of 'device.dart';
 Device _$DeviceFromJson(Map<String, dynamic> json) => Device(
       type: $enumDecode(_$DeviceTypeEnumMap, json['type']),
       name: json['name'] as String,
-      addr: json['addr'] as String,
+      mac: json['addr'] as String,
       features: (json['features'] as List<dynamic>)
           .map((e) => $enumDecode(_$DeviceFeatureEnumMap, e))
           .toList(),
@@ -18,7 +18,7 @@ Device _$DeviceFromJson(Map<String, dynamic> json) => Device(
 Map<String, dynamic> _$DeviceToJson(Device instance) => <String, dynamic>{
       'type': _$DeviceTypeEnumMap[instance.type]!,
       'name': instance.name,
-      'addr': instance.addr,
+      'addr': instance.mac,
       'features':
           instance.features.map((e) => _$DeviceFeatureEnumMap[e]!).toList(),
     };
