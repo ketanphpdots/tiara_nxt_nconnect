@@ -24,52 +24,103 @@ class MethodChannelTiaraNxtNConnect extends TiaraNxtNConnectPlatform {
     required String make,
     required String addr,
   }) async {
-    return await methodChannel.invokeMethod('getRfidReader', [make, addr]);
+    return await methodChannel.invokeMethod(
+      'getRfidReader',
+      {'make': make, 'mac': addr},
+    );
   }
 
   @override
-  Future<int> getBatteryLevel() async {
-    return await methodChannel.invokeMethod('getBatteryLevel') as int;
+  Future<int> getBatteryLevel({
+    required String mac,
+  }) async {
+    return await methodChannel.invokeMethod(
+      'getBatteryLevel',
+      {'mac': mac},
+    ) as int;
   }
 
   @override
-  Future<bool> startScan() async {
-    return await methodChannel.invokeMethod('startScan') as bool;
+  Future<bool> startScan({
+    required String mac,
+  }) async {
+    return await methodChannel.invokeMethod(
+      'startScan',
+      {'mac': mac},
+    ) as bool;
   }
 
   @override
-  Future<bool> stopScan() async {
-    return await methodChannel.invokeMethod('stopScan') as bool;
+  Future<bool> stopScan({
+    required String mac,
+  }) async {
+    return await methodChannel.invokeMethod(
+      'stopScan',
+      {'mac': mac},
+    ) as bool;
   }
 
   @override
-  Future<void> setPower(double power) async {
-    return await methodChannel.invokeMethod('setPower', power);
+  Future<void> setPower({
+    required String mac,
+    required double power,
+  }) async {
+    return await methodChannel.invokeMethod(
+      'setPower',
+      {'mac': mac, 'power': power},
+    );
   }
 
   @override
-  Future<double> getPower() async {
-    return await methodChannel.invokeMethod('getPower') as double;
+  Future<double> getPower({
+    required String mac,
+  }) async {
+    return await methodChannel.invokeMethod(
+      'getPower',
+      {'mac': mac},
+    ) as double;
   }
 
   @override
-  Future<void> setScanSpeed(int speed) async {
-    return await methodChannel.invokeMethod('setScanSpeed', speed);
+  Future<void> setScanSpeed({
+    required String mac,
+    required int speed,
+  }) async {
+    return await methodChannel.invokeMethod(
+      'setScanSpeed',
+      {'mac': mac, 'speed': speed},
+    );
   }
 
   @override
-  Future<int> getScanSpeed() async {
-    return await methodChannel.invokeMethod('getScanSpeed') as int;
+  Future<int> getScanSpeed({
+    required String mac,
+  }) async {
+    return await methodChannel.invokeMethod(
+      'getScanSpeed',
+      {'mac': mac},
+    ) as int;
   }
 
   @override
-  Future<int> writeToTag(String data) async {
-    return await methodChannel.invokeMethod('writeToTag', data);
+  Future<int> writeToTag({
+    required String mac,
+    required String data,
+  }) async {
+    return await methodChannel.invokeMethod(
+      'writeToTag',
+      {'mac': mac, 'data': data},
+    );
   }
 
   @override
-  Future<bool> isScanning() async {
-    return await methodChannel.invokeMethod('isScanning') as bool;
+  Future<bool> isScanning({
+    required String mac,
+  }) async {
+    return await methodChannel.invokeMethod(
+      'isScanning',
+      {'mac': mac},
+    ) as bool;
   }
 
   // @override
