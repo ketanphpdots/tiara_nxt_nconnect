@@ -25,6 +25,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.EventChannel
 import org.json.JSONObject
+import com.neotechid.nconnect.util.DatatypeConvertor
 
 /** TiaraNxtNConnectPlugin */
 class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
@@ -39,7 +40,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     private val rfidFactory: RfidFactory = RfidFactory.getInstance()
 
-    private lateinit var stringToRfidReaderMap: HashMap<String, RfidReader>
+    private var stringToRfidReaderMap: HashMap<String, RfidReader> = HashMap()
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "tiara_nxt_nconnect")
@@ -334,7 +335,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 val response = HashMap<String, Any?>()
                 response["event"] = "handleData"
                 response["readerMac"] = mac
-                response["readTag"] = tagData
+                response["readTag"] = DatatypeConvertor.hexToAsciiString(tagData)
                 response["antennaId"] = antennaId
                 response["scanDistance"] = scanDistance
                 val data = JSONObject(response).toString()
