@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
-import 'models/events/error_event.dart';
 import 'models/events/events.dart';
-import 'models/events/reader_event.dart';
 import 'tiara_nxt_nconnect_platform_interface.dart';
 
 /// An implementation of [TiaraNxtNConnectPlatform] that uses event channels.
@@ -30,7 +28,7 @@ class EventChannelTiaraNxtNConnect extends TiaraNxtNConnectPlatform {
             readerMac: data['readerMac'],
             error: data['error'],
           );
-        } else if (data['event' == 'handleReaderEvent']) {
+        } else if (data['event'] == 'handleReaderEvent') {
           return ReaderEvent(
             readerMac: data['readerMac'],
             readerEvent: data['readerEvent'],
