@@ -1,24 +1,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.tiara_nxt.tiara_nxt_nconnect">
 
-    <uses-permission android:name="android.permission.BLUETOOTH"
-                     android:maxSdkVersion="30" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"
-                     android:maxSdkVersion="30" />
+  <uses-permission android:name="android.permission.BLUETOOTH"
+    android:maxSdkVersion="30" />
+  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"
+    android:maxSdkVersion="30" />
+  <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+  <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+  <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
-    <uses-feature android:name="android.hardware.bluetooth" android:required="true"/>
-    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
-
-    <!-- <service android:name="com.neotechid.nconnect.bluetooth.AndroidBluetoothConnector" />
-    <service android:name="com.neotechid.nconnect.bluetooth.AndroidBleConnector" /> -->
+  <uses-feature android:name="android.hardware.bluetooth" android:required="true" />
+  <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
+  <uses-feature android:name="android.software.companion_device_setup" />
 
 </manifest>
