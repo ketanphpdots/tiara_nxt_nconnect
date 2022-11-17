@@ -14,7 +14,7 @@ class TiaraNxtNConnect {
   }
 
   ///
-  Future<void> startBluetoohService() async {
+  Future<void> startBluetoothService() async {
     return await _methodChannelInstance.startBluetoothService();
   }
 
