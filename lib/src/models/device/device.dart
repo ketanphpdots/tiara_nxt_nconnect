@@ -14,6 +14,7 @@ class Device {
   final String name;
   final String mac;
   List<DeviceFeature> features;
+  int battery;
 
   static SharedPreferences? _prefs;
 
@@ -22,6 +23,7 @@ class Device {
     required this.name,
     required this.mac,
     required this.features,
+    this.battery = 100,
   });
 
   factory Device.fromJson(Map<String, dynamic> json) => _$DeviceFromJson(json);
