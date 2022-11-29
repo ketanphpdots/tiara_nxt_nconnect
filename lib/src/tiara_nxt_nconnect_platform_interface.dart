@@ -137,7 +137,7 @@ abstract class TiaraNxtNConnectPlatform extends PlatformInterface {
     throw UnimplementedError('isScanning() has not been implemented.');
   }
 
-  Future<void> disconnect({
+  Future<bool> disconnect({
     required String mac,
   }) async {
     throw UnimplementedError('disconnect() has not been implemented.');

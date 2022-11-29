@@ -123,6 +123,16 @@ class MethodChannelTiaraNxtNConnect extends TiaraNxtNConnectPlatform {
     ) as bool;
   }
 
+  @override
+  Future<bool> disconnect({
+    required String mac,
+  }) async {
+    return await methodChannel.invokeMethod(
+      'disconnect',
+      {'mac': mac},
+    ) as bool;
+  }
+
   // @override
   // Future<void> registerListener() async {
   //   await methodChannel.invokeMethod('registerListener');
