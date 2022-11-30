@@ -12,9 +12,9 @@ class EventChannelTiaraNxtNConnect extends TiaraNxtNConnectPlatform {
   @override
   Stream<Event> getEventStream() {
     final stream = eventChannel.receiveBroadcastStream();
-    // stream.listen((data) {
-    //   print('[EventChannelTiaraNxtNConnect-receiveBroadcastStream] $data');
-    // });
+    stream.listen((data) {
+      print('[EventChannelTiaraNxtNConnect-receiveBroadcastStream] $data');
+    });
     return stream.map(
       (event) {
         final data = json.decode(event) as Map<String, dynamic>;
