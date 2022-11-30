@@ -6,7 +6,9 @@ import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.*
 import android.content.pm.PackageManager
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import androidx.core.app.ActivityCompat
 import com.neotechid.nconnect.ReaderEvent
 import com.neotechid.nconnect.RfidEventListener
@@ -43,6 +45,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private var stringToRfidReaderMap: HashMap<String, RfidReader> = HashMap()
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        println("[TiaraNxtNConnectPlugin.kt-onAttachedToEngine] Current Thread Name: ${Thread.currentThread().name}")
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "tiara_nxt_nconnect")
         channel.setMethodCallHandler(this)
         eventChannel =
@@ -52,6 +55,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+        println("[TiaraNxtNConnectPlugin.kt-onMethodCall] Current Thread Name: ${Thread.currentThread().name}")
         when (call.method) {
             "ping" -> {
                 result.success(ping())
@@ -135,6 +139,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        println("[TiaraNxtNConnectPlugin.kt-onAttachedToActivity] Current Thread Name: ${Thread.currentThread().name}")
         activity = binding.activity
     }
 
@@ -151,14 +156,17 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+        println("[TiaraNxtNConnectPlugin.kt-onDetachedFromEngine] Current Thread Name: ${Thread.currentThread().name}")
         channel.setMethodCallHandler(null)
     }
 
     private fun ping(): String {
+        println("[TiaraNxtNConnectPlugin.kt-ping] Current Thread Name: ${Thread.currentThread().name}")
         return "pong"
     }
 
     private fun startBluetoothService() {
+        println("[TiaraNxtNConnectPlugin.kt-startBluetoothService] Current Thread Name: ${Thread.currentThread().name}")
         try {
             activity.startService(Intent(context, AndroidBluetoothConnector::class.java))
             doBindService()
@@ -168,6 +176,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun doBindService() {
+        println("[TiaraNxtNConnectPlugin.kt-doBindService] Current Thread Name: ${Thread.currentThread().name}")
         try {
             val adapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             if (!adapter.isEnabled) {
@@ -202,6 +211,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun startBLEService() {
+        println("[TiaraNxtNConnectPlugin.kt-startBLEService] Current Thread Name: ${Thread.currentThread().name}")
         try {
             activity.startService(Intent(context, AndroidBleConnector::class.java))
             activity.bindService(
@@ -241,11 +251,12 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun getRfidReader(make: String, mac: String): Boolean {
+        println("[TiaraNxtNConnectPlugin.kt-getRfidReader] Current Thread Name: ${Thread.currentThread().name}")
         return try {
             if (!stringToRfidReaderMap.containsKey(mac)) {
                 val newRfidReader = rfidFactory.getRfidReader(make, mac, "android")
                 newRfidReader.connect()
-                newRfidReader.registerListener(getRfidEventListener(mac))
+                 newRfidReader.registerListener(getRfidEventListener(mac))
                 stringToRfidReaderMap[mac] = newRfidReader
             }
             true
@@ -256,6 +267,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun getBatteryLevel(mac: String): Int {
+        println("[TiaraNxtNConnectPlugin.kt-getBatteryLevel] Current Thread Name: ${Thread.currentThread().name}")
         return try {
             if (stringToRfidReaderMap.containsKey(mac)) {
                 return stringToRfidReaderMap[mac]!!.batteryLevel
@@ -268,6 +280,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun startScan(mac: String): Boolean {
+        println("[TiaraNxtNConnectPlugin.kt-startScan] Current Thread Name: ${Thread.currentThread().name}")
         if (stringToRfidReaderMap.containsKey(mac)) {
             return stringToRfidReaderMap[mac]!!.startScan()
         }
@@ -275,6 +288,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun stopScan(mac: String): Boolean {
+        println("[TiaraNxtNConnectPlugin.kt-stopScan] Current Thread Name: ${Thread.currentThread().name}")
         if (stringToRfidReaderMap.containsKey(mac)) {
             return stringToRfidReaderMap[mac]!!.stopScan()
         }
@@ -282,12 +296,14 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun setPower(mac: String, power: Double) {
+        println("[TiaraNxtNConnectPlugin.kt-setPower] Current Thread Name: ${Thread.currentThread().name}")
         if (stringToRfidReaderMap.containsKey(mac)) {
             stringToRfidReaderMap[mac]!!.power = power
         }
     }
 
     private fun getPower(mac: String): Double {
+        println("[TiaraNxtNConnectPlugin.kt-getPower] Current Thread Name: ${Thread.currentThread().name}")
         if (stringToRfidReaderMap.containsKey(mac)) {
             return stringToRfidReaderMap[mac]!!.power
         }
@@ -295,12 +311,14 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun setScanSpeed(mac: String, speed: Int) {
+        println("[TiaraNxtNConnectPlugin.kt-setScanSpeed] Current Thread Name: ${Thread.currentThread().name}")
         if (stringToRfidReaderMap.containsKey(mac)) {
             stringToRfidReaderMap[mac]!!.scanSpeed = speed
         }
     }
 
     private fun getScanSpeed(mac: String): Int {
+        println("[TiaraNxtNConnectPlugin.kt-getScanSpeed] Current Thread Name: ${Thread.currentThread().name}")
         if (stringToRfidReaderMap.containsKey(mac)) {
             return stringToRfidReaderMap[mac]!!.scanSpeed
         }
@@ -308,6 +326,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun writeToTag(mac: String, data: String): Int {
+        println("[TiaraNxtNConnectPlugin.kt-writeToTag] Current Thread Name: ${Thread.currentThread().name}")
         if (stringToRfidReaderMap.containsKey(mac)) {
             stringToRfidReaderMap[mac]!!.writeToTag(data)
         }
@@ -315,6 +334,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun isScanning(mac: String): Boolean {
+        println("[TiaraNxtNConnectPlugin.kt-isScanning] Current Thread Name: ${Thread.currentThread().name}")
         if (stringToRfidReaderMap.containsKey(mac)) {
             return stringToRfidReaderMap[mac]!!.isScanning
         }
@@ -322,8 +342,12 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun disconnect(mac: String): Boolean {
+        println("[TiaraNxtNConnectPlugin.kt-disconnect] Current Thread Name: ${Thread.currentThread().name}")
         if (stringToRfidReaderMap.containsKey(mac)) {
-            return stringToRfidReaderMap[mac]!!.disconnect()
+            stringToRfidReaderMap[mac]!!.removeAllListeners()
+            stringToRfidReaderMap.remove(mac)
+//            return stringToRfidReaderMap[mac]!!.disconnect()
+            return true
         }
         return false
     }
@@ -331,6 +355,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private fun getRfidEventListener(mac: String): RfidEventListener {
         val rfidEventListener = object : RfidEventListener {
             override fun handleData(tagData: String?, antennaId: Int, scanDistance: Int) {
+                println("[TiaraNxtNConnectPlugin.kt-getRfidEventListener-${mac}-handleData] Current Thread Name: ${Thread.currentThread().name}")
                 println("[handleData] Read TAG: $tagData\tAntenna ID: $antennaId\tScan Distance: $scanDistance")
                 val response = HashMap<String, Any?>()
                 response["event"] = "handleData"
@@ -339,44 +364,58 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 response["antennaId"] = antennaId
                 response["scanDistance"] = scanDistance
                 val data = JSONObject(response).toString()
-                eventSink?.success(data)
+                Handler(Looper.getMainLooper()).post {
+                    eventSink?.success(data)
+                }
             }
 
             override fun handleError(errorMessage: String?) {
+                println("[TiaraNxtNConnectPlugin.kt-getRfidEventListener-${mac}-handleError] Current Thread Name: ${Thread.currentThread().name}")
                 println("[handleError] Error: $errorMessage")
                 val response = HashMap<String, Any?>()
                 response["event"] = "handleError"
                 response["readerMac"] = mac
                 response["error"] = errorMessage
                 val data = JSONObject(response).toString()
-                eventSink?.success(data)
+                Handler(Looper.getMainLooper()).post {
+                    eventSink?.success(data)
+                }
             }
 
             override fun handleReaderEvent(readerEvent: ReaderEvent?) {
+                println("[TiaraNxtNConnectPlugin.kt-getRfidEventListener-${mac}-handleReaderEvent] Current Thread Name: ${Thread.currentThread().name}")
                 println("[handleReaderEvent] Reader Event: $readerEvent")
                 val response = HashMap<String, Any?>()
                 response["event"] = "handleReaderEvent"
                 response["readerMac"] = mac
                 response["readerEvent"] = readerEvent.toString()
                 val data = JSONObject(response).toString()
-                eventSink?.success(data)
+                Handler(Looper.getMainLooper()).post {
+                    eventSink?.success(data)
+                }
             }
 
             override fun handleReaderEvent(readerEvent: ReaderEvent?, p1: String?) {
+                println("[TiaraNxtNConnectPlugin.kt-getRfidEventListener-${mac}-handleReaderEvent] Current Thread Name: ${Thread.currentThread().name}")
                 println("[handleReaderEvent] Reader Event: $readerEvent\tP1: $p1")
                 val response = HashMap<String, Any?>()
                 response["event"] = "handleReaderEvent"
                 response["readerEvent"] = readerEvent.toString()
+                response["readerMac"] = mac
                 response["p1"] = p1
                 val data = JSONObject(response).toString()
-                eventSink?.success(data)
+                Handler(Looper.getMainLooper()).post {
+                    eventSink?.success(data)
+                }
             }
 
             override fun setEnabled(p0: Boolean) {
+                println("[TiaraNxtNConnectPlugin.kt-getRfidEventListener-${mac}-setEnabled] Current Thread Name: ${Thread.currentThread().name}")
                 println("[setEnabled] TODO(\"Not yet implemented\")")
             }
 
             override fun isEnabled(): Boolean {
+                println("[TiaraNxtNConnectPlugin.kt-getRfidEventListener-${mac}-isEnabled] Current Thread Name: ${Thread.currentThread().name}")
                 // return true, as guided by Neha ma'am
                 return true
             }
