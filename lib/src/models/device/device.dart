@@ -4,6 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../enums/device_feature.dart';
+import '../../enums/device_power.dart';
 import '../../enums/device_type.dart';
 
 part 'device.g.dart';
@@ -13,8 +14,10 @@ class Device {
   final DeviceType type;
   final String name;
   final String mac;
+  DevicePower power;
   List<DeviceFeature> features;
   int battery;
+  bool isScanning;
 
   static SharedPreferences? _prefs;
 
@@ -23,7 +26,9 @@ class Device {
     required this.name,
     required this.mac,
     required this.features,
+    this.power = DevicePower.unknown,
     this.battery = 100,
+    this.isScanning = false,
   });
 
   factory Device.fromJson(Map<String, dynamic> json) => _$DeviceFromJson(json);
