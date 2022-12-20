@@ -253,12 +253,13 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private fun getRfidReader(make: String, mac: String): Boolean {
         println("[TiaraNxtNConnectPlugin.kt-getRfidReader] Current Thread Name: ${Thread.currentThread().name}")
         return try {
-            if (!stringToRfidReaderMap.containsKey(mac)) {
-                val newRfidReader = rfidFactory.getRfidReader(make, mac, "android")
-                newRfidReader.connect()
-                 newRfidReader.registerListener(getRfidEventListener(mac))
-                stringToRfidReaderMap[mac] = newRfidReader
+            if (stringToRfidReaderMap.containsKey(mac)) {
+                disconnect(mac)
             }
+            val newRfidReader = rfidFactory.getRfidReader(make, mac, "android")
+            newRfidReader.registerListener(getRfidEventListener(mac))
+            stringToRfidReaderMap[mac] = newRfidReader
+            newRfidReader.connect()
             true
         } catch (e: Exception) {
             println(e.toString())
