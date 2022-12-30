@@ -65,7 +65,7 @@ class MethodChannelTiaraNxtNConnect extends TiaraNxtNConnectPlatform {
     required String mac,
     required double power,
   }) async {
-    return await methodChannel.invokeMethod(
+    await methodChannel.invokeMethod(
       'setPower',
       {'mac': mac, 'power': power},
     );
@@ -86,7 +86,7 @@ class MethodChannelTiaraNxtNConnect extends TiaraNxtNConnectPlatform {
     required String mac,
     required int speed,
   }) async {
-    return await methodChannel.invokeMethod(
+    await methodChannel.invokeMethod(
       'setScanSpeed',
       {'mac': mac, 'speed': speed},
     );
