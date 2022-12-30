@@ -296,11 +296,13 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         return false
     }
 
-    private fun setPower(mac: String, power: Double) {
+    private fun setPower(mac: String, power: Double): Boolean {
         println("[TiaraNxtNConnectPlugin.kt-setPower] Current Thread Name: ${Thread.currentThread().name}")
         if (stringToRfidReaderMap.containsKey(mac)) {
             stringToRfidReaderMap[mac]!!.power = power
+            return true
         }
+        return false
     }
 
     private fun getPower(mac: String): Double {
@@ -311,11 +313,13 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         return -1.0
     }
 
-    private fun setScanSpeed(mac: String, speed: Int) {
+    private fun setScanSpeed(mac: String, speed: Int): Boolean {
         println("[TiaraNxtNConnectPlugin.kt-setScanSpeed] Current Thread Name: ${Thread.currentThread().name}")
         if (stringToRfidReaderMap.containsKey(mac)) {
             stringToRfidReaderMap[mac]!!.scanSpeed = speed
+            return true
         }
+        return false
     }
 
     private fun getScanSpeed(mac: String): Int {
@@ -347,7 +351,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         if (stringToRfidReaderMap.containsKey(mac)) {
             stringToRfidReaderMap[mac]!!.removeAllListeners()
             stringToRfidReaderMap.remove(mac)
-//            return stringToRfidReaderMap[mac]!!.disconnect()
+            return stringToRfidReaderMap[mac]!!.disconnect()
             return true
         }
         return false
