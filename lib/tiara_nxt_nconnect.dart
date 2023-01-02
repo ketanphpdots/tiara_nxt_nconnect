@@ -3,6 +3,7 @@ import 'src/tiara_nxt_nconnect_platform_interface.dart';
 
 export 'src/enums/enums.dart';
 export 'src/models/models.dart';
+export 'src/helpers/default_device_features.dart';
 
 class TiaraNxtNConnect {
   final _methodChannelInstance = TiaraNxtNConnectPlatform.methodChannelInstance;
