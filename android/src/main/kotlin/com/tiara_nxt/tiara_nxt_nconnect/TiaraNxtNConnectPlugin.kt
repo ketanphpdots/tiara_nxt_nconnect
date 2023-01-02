@@ -350,8 +350,8 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         println("[TiaraNxtNConnectPlugin.kt-disconnect] Current Thread Name: ${Thread.currentThread().name}")
         if (stringToRfidReaderMap.containsKey(mac)) {
             stringToRfidReaderMap[mac]!!.removeAllListeners()
+            stringToRfidReaderMap[mac]!!.disconnect()
             stringToRfidReaderMap.remove(mac)
-            return stringToRfidReaderMap[mac]!!.disconnect()
             return true
         }
         return false
