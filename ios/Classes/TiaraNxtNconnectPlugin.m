@@ -1,4 +1,4 @@
-#import "TiaraNxtNconnectPlugin.h"
+#import "TiaraNxtNConnectPlugin.h"
 #if __has_include(<tiara_nxt_nconnect/tiara_nxt_nconnect-Swift.h>)
 #import <tiara_nxt_nconnect/tiara_nxt_nconnect-Swift.h>
 #else
@@ -8,8 +8,8 @@
 #import "tiara_nxt_nconnect-Swift.h"
 #endif
 
-@implementation TiaraNxtNconnectPlugin
+@implementation TiaraNxtNConnectPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  [SwiftTiaraNxtNconnectPlugin registerWithRegistrar:registrar];
+  [SwiftTiaraNxtNConnectPlugin registerWithRegistrar:registrar];
 }
 @end

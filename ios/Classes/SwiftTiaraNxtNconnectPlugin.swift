@@ -1,10 +1,10 @@
 import Flutter
 import UIKit
 
-public class SwiftTiaraNxtNconnectPlugin: NSObject, FlutterPlugin {
+public class SwiftTiaraNxtNConnectPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "tiara_nxt_nconnect", binaryMessenger: registrar.messenger())
-    let instance = SwiftTiaraNxtNconnectPlugin()
+    let instance = SwiftTiaraNxtNConnectPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 

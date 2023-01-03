@@ -1,4 +1,4 @@
 #import <Flutter/Flutter.h>
 
-@interface TiaraNxtNconnectPlugin : NSObject<FlutterPlugin>
+@interface TiaraNxtNConnectPlugin : NSObject <FlutterPlugin>
 @end
