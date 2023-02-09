@@ -24,10 +24,14 @@ class MethodChannelTiaraNxtNConnect extends TiaraNxtNConnectPlatform {
     required String make,
     required String addr,
   }) async {
-    return await methodChannel.invokeMethod(
-      'getRfidReader',
-      {'make': make, 'mac': addr},
-    );
+    try {
+      return await methodChannel.invokeMethod(
+        'getRfidReader',
+        {'make': make, 'mac': addr},
+      );
+    } on PlatformException {
+      rethrow;
+    }
   }
 
   @override

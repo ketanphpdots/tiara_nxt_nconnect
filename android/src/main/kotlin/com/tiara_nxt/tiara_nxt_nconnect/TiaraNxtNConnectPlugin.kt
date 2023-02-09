@@ -10,8 +10,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import androidx.core.app.ActivityCompat
-import com.neotechid.nconnect.ReaderEvent
-import com.neotechid.nconnect.RfidEventListener
+import com.neotechid.nconnect.*
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
@@ -19,8 +18,6 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
-import com.neotechid.nconnect.RfidFactory
-import com.neotechid.nconnect.RfidReader
 import com.neotechid.nconnect.bluetooth.AndroidBleConnector
 import com.neotechid.nconnect.bluetooth.AndroidBluetoothConnector
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -28,6 +25,8 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.EventChannel
 import org.json.JSONObject
 import com.neotechid.nconnect.util.DatatypeConvertor
+import com.neotechid.nconnect.util.LicenseExpiryException
+import java.io.IOException
 
 /** TiaraNxtNConnectPlugin */
 class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
@@ -66,62 +65,67 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 result.success(null)
             }
             "getRfidReader" -> {
-                val args = call.arguments as Map<String, *>
+                val args = call.arguments as Map<*, *>
                 val make = args["make"] as String
                 val mac = args["mac"] as String
-                val success: Boolean = getRfidReader(make, mac)
-                result.success(success)
+                try {
+                    val success: Boolean = getRfidReader(make, mac)
+                    result.success(success)
+                } catch (e: CaughtException) {
+                    result.error(e.code, e.message, null)
+                }
+
             }
             "getBatteryLevel" -> {
-                val args = call.arguments as Map<String, *>
+                val args = call.arguments as Map<*, *>
                 val mac = args["mac"] as String
                 result.success(getBatteryLevel(mac))
             }
             "startScan" -> {
-                val args = call.arguments as Map<String, *>
+                val args = call.arguments as Map<*, *>
                 val mac = args["mac"] as String
                 result.success(startScan(mac))
             }
             "stopScan" -> {
-                val args = call.arguments as Map<String, *>
+                val args = call.arguments as Map<*, *>
                 val mac = args["mac"] as String
                 result.success(stopScan(mac))
             }
             "setPower" -> {
-                val args = call.arguments as Map<String, *>
+                val args = call.arguments as Map<*, *>
                 val mac = args["mac"] as String
                 val power = args["power"] as Double
                 result.success(setPower(mac, power))
             }
             "getPower" -> {
-                val args = call.arguments as Map<String, *>
+                val args = call.arguments as Map<*, *>
                 val mac = args["mac"] as String
                 result.success(getPower(mac))
             }
             "setScanSpeed" -> {
-                val args = call.arguments as Map<String, *>
+                val args = call.arguments as Map<*, *>
                 val mac = args["mac"] as String
                 val speed = args["speed"] as Int
                 result.success(setScanSpeed(mac, speed))
             }
             "getScanSpeed" -> {
-                val args = call.arguments as Map<String, *>
+                val args = call.arguments as Map<*, *>
                 val mac = args["mac"] as String
                 result.success(getScanSpeed(mac))
             }
             "writeToTag" -> {
-                val args = call.arguments as Map<String, *>
+                val args = call.arguments as Map<*, *>
                 val mac = args["mac"] as String
                 val data = args["data"] as String
                 result.success(writeToTag(mac, data))
             }
             "isScanning" -> {
-                val args = call.arguments as Map<String, *>
+                val args = call.arguments as Map<*, *>
                 val mac = args["mac"] as String
                 result.success(isScanning(mac))
             }
             "disconnect" -> {
-                val args = call.arguments as Map<String, *>
+                val args = call.arguments as Map<*, *>
                 val mac = args["mac"] as String
                 result.success(disconnect(mac))
             }
@@ -250,6 +254,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         }
     }
 
+    @Throws(CaughtException::class)
     private fun getRfidReader(make: String, mac: String): Boolean {
         println("[TiaraNxtNConnectPlugin.kt-getRfidReader] Current Thread Name: ${Thread.currentThread().name}")
         return try {
@@ -261,8 +266,14 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             stringToRfidReaderMap[mac] = newRfidReader
             newRfidReader.connect()
             true
+        } catch (e: IOException) {
+            throw CaughtException("IOException", "${e.message}")
+        } catch (e: LicenseExpiryException) {
+            throw CaughtException("LicenseExpiryException", "${e.message}")
+        } catch (e: ReaderConnectionException) {
+            throw CaughtException("ReaderConnectionException", "${e.message}")
         } catch (e: Exception) {
-            println(e.toString())
+            println("[getRfidReader-uncaught exception] $e")
             false
         }
     }
@@ -273,7 +284,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             if (stringToRfidReaderMap.containsKey(mac)) {
                 return stringToRfidReaderMap[mac]!!.batteryLevel
             }
-            return -1
+            -1
         } catch (e: Exception) {
             println(e.toString())
             -1
