@@ -1,26 +1,27 @@
 PODS:
   - Flutter (1.0.0)
-  - shared_preferences_ios (0.0.1):
+  - shared_preferences_foundation (0.0.1):
     - Flutter
+    - FlutterMacOS
   - tiara_nxt_nconnect (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
   - tiara_nxt_nconnect (from `.symlinks/plugins/tiara_nxt_nconnect/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
-  shared_preferences_ios:
-    :path: ".symlinks/plugins/shared_preferences_ios/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/ios"
   tiara_nxt_nconnect:
     :path: ".symlinks/plugins/tiara_nxt_nconnect/ios"
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
+  shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
   tiara_nxt_nconnect: a47d8ce55efda0a33dc997b3d68a9862841937dd
 
 PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048

@@ -1,7 +1,11 @@
 import Flutter
 import UIKit
+import nconnect4i
 
 public class SwiftTiaraNxtNConnectPlugin: NSObject, FlutterPlugin {
+    
+    var stringToRfidReaderMap = Dictionary<String, RfidReader>()
+    
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "tiara_nxt_nconnect", binaryMessenger: registrar.messenger())
     let instance = SwiftTiaraNxtNConnectPlugin()
@@ -9,14 +13,42 @@ public class SwiftTiaraNxtNConnectPlugin: NSObject, FlutterPlugin {
     
   }
 
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    fileprivate func getRfidReader(_ call: FlutterMethodCall, _ result: FlutterResult) {
+        let args = call.arguments as! Dictionary<String, Any>
+        var make = args["make"] as! String
+        var mac = args["mac"] as! String
+        do {
+            if(stringToRfidReaderMap.keys.contains(mac)){
+                var reader = stringToRfidReaderMap[mac]
+                try reader?.disconnect()
+                stringToRfidReaderMap.removeValue(forKey: mac)
+            }
+            var readerMake: ReaderMake
+            if(mac.starts(with: "AT388")){
+                readerMake = ReaderMake.WAND
+            }else {
+                readerMake = ReaderMake.SURFACE
+            }
+            var reader = try RfidFactory.getRfidReader(make: readerMake, hostname: mac, license: "")
+            stringToRfidReaderMap[mac] = reader
+            try reader.connect()
+            result(true)
+        } catch {
+            print(error)
+            result(false)
+        }
+    }
+    
+    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+      
     switch call.method {
         case "ping":
             result("pong")
         case "startBluetoothService":
-            result(FlutterMethodNotImplemented)
+            result(true)
         case "getRfidReader":
-            result(FlutterMethodNotImplemented)
+        getRfidReader(call, result)
+        result(FlutterMethodNotImplemented)
         case "getBatteryLevel":
             result(FlutterMethodNotImplemented)
         case "startScan":
