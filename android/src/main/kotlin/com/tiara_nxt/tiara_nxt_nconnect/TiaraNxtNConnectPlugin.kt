@@ -74,7 +74,6 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 } catch (e: CaughtException) {
                     result.error(e.code, e.message, null)
                 }
-
             }
             "getBatteryLevel" -> {
                 val args = call.arguments as Map<*, *>
