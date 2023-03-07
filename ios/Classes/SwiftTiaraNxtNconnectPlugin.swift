@@ -4,55 +4,36 @@ import nconnect4i
 
 public class SwiftTiaraNxtNConnectPlugin: NSObject, FlutterPlugin {
     
-    var stringToRfidReaderMap = Dictionary<String, RfidReader>()
+    var stringToRfidReaderMap = [String:RfidReader]()
     
-  public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "tiara_nxt_nconnect", binaryMessenger: registrar.messenger())
-    let instance = SwiftTiaraNxtNConnectPlugin()
-    registrar.addMethodCallDelegate(instance, channel: channel)
-    
-  }
-
-    fileprivate func getRfidReader(_ call: FlutterMethodCall, _ result: FlutterResult) {
-        let args = call.arguments as! Dictionary<String, Any>
-        var make = args["make"] as! String
-        var mac = args["mac"] as! String
-        do {
-            if(stringToRfidReaderMap.keys.contains(mac)){
-                var reader = stringToRfidReaderMap[mac]
-                try reader?.disconnect()
-                stringToRfidReaderMap.removeValue(forKey: mac)
-            }
-            var readerMake: ReaderMake
-            if(mac.starts(with: "AT388")){
-                readerMake = ReaderMake.WAND
-            }else {
-                readerMake = ReaderMake.SURFACE
-            }
-            var reader = try RfidFactory.getRfidReader(make: readerMake, hostname: mac, license: "")
-            stringToRfidReaderMap[mac] = reader
-            try reader.connect()
-            result(true)
-        } catch {
-            print(error)
-            result(false)
-        }
+    public static func register(with registrar: FlutterPluginRegistrar) {
+        let channel = FlutterMethodChannel(name: "tiara_nxt_nconnect", binaryMessenger: registrar.messenger())
+        let instance = SwiftTiaraNxtNConnectPlugin()
+        registrar.addMethodCallDelegate(instance, channel: channel)
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-      
-    switch call.method {
+        switch call.method {
         case "ping":
             result("pong")
         case "startBluetoothService":
             result(true)
         case "getRfidReader":
-        getRfidReader(call, result)
-        result(FlutterMethodNotImplemented)
+            let args = call.arguments as! [String:Any]
+            let make = args["make"] as! String
+            let mac = args["mac"] as! String
+            let success: Bool =  getRfidReader(make: make, mac: mac)
+            result(success)
         case "getBatteryLevel":
-            result(FlutterMethodNotImplemented)
+            let args = call.arguments as! [String:Any]
+            let mac = args["mac"] as! String
+            let batteryLevel:Int = getBatteryLevel(mac: mac)
+            result(batteryLevel)
         case "startScan":
-            result(FlutterMethodNotImplemented)
+            let args = call.arguments as! [String:Any]
+            let mac = args["mac"] as! String
+            let success: Bool = startScan(mac: mac)
+            result(success)
         case "stopScan":
             result(FlutterMethodNotImplemented)
         case "setPower":
@@ -71,6 +52,57 @@ public class SwiftTiaraNxtNConnectPlugin: NSObject, FlutterPlugin {
             result(FlutterMethodNotImplemented)
         default:
             result(FlutterMethodNotImplemented)
+        }
     }
-  }
+    
+    private func getRfidReader(make:String, mac: String) -> Bool {
+        print("[TiaraNxtNConnectPlugin.swift-getRfidReader]")
+        if(stringToRfidReaderMap[mac] != nil) {
+            print("getRfidReader was already called for this reader in the past")
+            // TODO: Disconnect the reader
+        }
+        do {
+            let newRfidReader = try RfidFactory.getRfidReader(make: ReaderMake.WAND, hostname: mac, license: "")
+            stringToRfidReaderMap[mac] = newRfidReader
+            try newRfidReader.connect()
+            return true
+        } catch {
+            print("error connecting with new reader", error)
+            return false
+        }
+    }
+    
+    private func getBatteryLevel(mac: String) -> Int {
+        print("[TiaraNxtNConnectPlugin.swift-getBatteryLevel]")
+        let reader = stringToRfidReaderMap[mac]
+        if(reader != nil) {
+            do {
+                let b: Int? = try reader?.getBatteryLevel();
+                if(b == nil) {
+                    return -1
+                }
+                return b!
+            } catch {
+                print("error getting battery level of rfid reader", error)
+                return -1
+            }
+        }
+        return -1;
+    }
+    
+    private func startScan(mac: String) -> Bool {
+        print("[TiaraNxtNConnectPlugin.swift-startScan]")
+        let reader = stringToRfidReaderMap[mac]
+        if(reader != nil){
+            do {
+                try reader?.startScan()
+                return true
+            } catch {
+                print("error starting scan of rfid reader", error)
+                return false
+            }
+        }
+        return false
+    }
 }
+
