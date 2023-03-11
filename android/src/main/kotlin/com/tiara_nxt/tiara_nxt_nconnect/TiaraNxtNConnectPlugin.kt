@@ -42,6 +42,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private val rfidFactory: RfidFactory = RfidFactory.getInstance()
 
     private var stringToRfidReaderMap: HashMap<String, RfidReader> = HashMap()
+    private var lic: String? = null
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         println("[TiaraNxtNConnectPlugin.kt-onAttachedToEngine] Current Thread Name: ${Thread.currentThread().name}")
@@ -58,6 +59,12 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         when (call.method) {
             "ping" -> {
                 result.success(ping())
+            }
+            "setLic" -> {
+                val args = call.arguments as Map<*, *>
+                val lic = args["lic"] as String
+                this.lic = lic
+                result.success(true)
             }
             "startBluetoothService" -> {
                 startBluetoothService()
@@ -260,7 +267,7 @@ class TiaraNxtNConnectPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             if (stringToRfidReaderMap.containsKey(mac)) {
                 disconnect(mac)
             }
-            val newRfidReader = rfidFactory.getRfidReader(make, mac, "android")
+            val newRfidReader = rfidFactory.getRfidReader(make, mac, "android", lic)
             newRfidReader.registerListener(getRfidEventListener(mac))
             stringToRfidReaderMap[mac] = newRfidReader
             newRfidReader.connect()

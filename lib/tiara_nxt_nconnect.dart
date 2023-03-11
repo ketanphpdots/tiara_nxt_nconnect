@@ -14,6 +14,10 @@ class TiaraNxtNConnect {
     return _methodChannelInstance.ping();
   }
 
+  Future<bool> setLic(String lic) async {
+    return _methodChannelInstance.setLic(lic: lic);
+  }
+
   ///
   Future<void> startBluetoothService() async {
     return await _methodChannelInstance.startBluetoothService();

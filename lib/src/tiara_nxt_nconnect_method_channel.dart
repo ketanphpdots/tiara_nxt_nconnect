@@ -15,6 +15,11 @@ class MethodChannelTiaraNxtNConnect extends TiaraNxtNConnectPlatform {
   }
 
   @override
+  Future<bool> setLic({required String lic}) async {
+    return await methodChannel.invokeMethod('setLic') as bool;
+  }
+
+  @override
   Future<void> startBluetoothService() async {
     await methodChannel.invokeMethod('startBluetoothService');
   }

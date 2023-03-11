@@ -38,6 +38,10 @@ abstract class TiaraNxtNConnectPlatform extends PlatformInterface {
     throw UnimplementedError('ping() has not been implemented.');
   }
 
+  Future<bool> setLic({required String lic}) async {
+    throw UnimplementedError('setLic() has not been implemented.');
+  }
+
   ///
   Future<void> startBluetoothService() async {
     throw UnimplementedError(
