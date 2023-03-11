@@ -16,7 +16,7 @@ class MethodChannelTiaraNxtNConnect extends TiaraNxtNConnectPlatform {
 
   @override
   Future<bool> setLic({required String lic}) async {
-    return await methodChannel.invokeMethod('setLic') as bool;
+    return await methodChannel.invokeMethod('setLic', {'lic': lic}) as bool;
   }
 
   @override

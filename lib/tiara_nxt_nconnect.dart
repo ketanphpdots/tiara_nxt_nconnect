@@ -15,7 +15,7 @@ class TiaraNxtNConnect {
   }
 
   Future<bool> setLic(String lic) async {
-    return _methodChannelInstance.setLic(lic: lic);
+    return await _methodChannelInstance.setLic(lic: lic);
   }
 
   ///
