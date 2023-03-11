@@ -1,0 +1,11 @@
+framework module NConnectFramework {
+  umbrella header "NConnectFramework.h"
+
+  export *
+  module * { export * }
+}
+
+module NConnectFramework.Swift {
+  header "NConnectFramework-Swift.h"
+  requires objc
+}
