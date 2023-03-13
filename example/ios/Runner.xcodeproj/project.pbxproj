@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1479302B29B9D7A1005A13BF /* EARfidFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1479302929B9D799005A13BF /* EARfidFramework.framework */; };
-		1479302C29B9D7A1005A13BF /* EARfidFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1479302929B9D799005A13BF /* EARfidFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		1479302D29B9D7B1005A13BF /* NConnectFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1479302729B9D793005A13BF /* NConnectFramework.framework */; };
-		1479302E29B9D7B1005A13BF /* NConnectFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1479302729B9D793005A13BF /* NConnectFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1496A5FD29BF36BF0024B6CC /* EARfidFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1496A5F629BF367C0024B6CC /* EARfidFramework.framework */; };
+		1496A5FE29BF36BF0024B6CC /* EARfidFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1496A5F629BF367C0024B6CC /* EARfidFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1496A5FF29BF36C10024B6CC /* NConnectFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1496A5F429BF36750024B6CC /* NConnectFramework.framework */; };
+		1496A60029BF36C10024B6CC /* NConnectFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1496A5F429BF36750024B6CC /* NConnectFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		63D6FA29AE8C7155B4C2DAA8 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C67E22DC1F844F3E82DA16 /* Pods_Runner.framework */; };
@@ -27,8 +27,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				1479302C29B9D7A1005A13BF /* EARfidFramework.framework in Embed Frameworks */,
-				1479302E29B9D7B1005A13BF /* NConnectFramework.framework in Embed Frameworks */,
+				1496A5FE29BF36BF0024B6CC /* EARfidFramework.framework in Embed Frameworks */,
+				1496A60029BF36C10024B6CC /* NConnectFramework.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -37,8 +37,8 @@
 
 /* Begin PBXFileReference section */
 		144F848629B758EC00ABF1DC /* NConnectFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NConnectFramework.framework; path = ../../../NConnectFramework.framework; sourceTree = "<group>"; };
-		1479302729B9D793005A13BF /* NConnectFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NConnectFramework.framework; sourceTree = "<group>"; };
-		1479302929B9D799005A13BF /* EARfidFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EARfidFramework.framework; sourceTree = "<group>"; };
+		1496A5F429BF36750024B6CC /* NConnectFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NConnectFramework.framework; sourceTree = "<group>"; };
+		1496A5F629BF367C0024B6CC /* EARfidFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EARfidFramework.framework; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		2D6623C036DD66652F7A0A16 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
@@ -64,8 +64,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				63D6FA29AE8C7155B4C2DAA8 /* Pods_Runner.framework in Frameworks */,
-				1479302B29B9D7A1005A13BF /* EARfidFramework.framework in Frameworks */,
-				1479302D29B9D7B1005A13BF /* NConnectFramework.framework in Frameworks */,
+				1496A5FD29BF36BF0024B6CC /* EARfidFramework.framework in Frameworks */,
+				1496A5FF29BF36C10024B6CC /* NConnectFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,8 +105,8 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
-				1479302729B9D793005A13BF /* NConnectFramework.framework */,
-				1479302929B9D799005A13BF /* EARfidFramework.framework */,
+				1496A5F429BF36750024B6CC /* NConnectFramework.framework */,
+				1496A5F629BF367C0024B6CC /* EARfidFramework.framework */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
 				97C146EF1CF9000F007C117D /* Products */,
@@ -371,7 +371,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = C7UWJ665CC;
+				DEVELOPMENT_TEAM = CA4SUGMV2V;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -513,7 +513,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = C7UWJ665CC;
+				DEVELOPMENT_TEAM = CA4SUGMV2V;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -545,7 +545,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = C7UWJ665CC;
+				DEVELOPMENT_TEAM = CA4SUGMV2V;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

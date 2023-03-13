@@ -30,7 +30,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		Gy+EWNAihnV6WXIQwk0L/zixMFE=
+		tDybNR63I9jH/PFPL0HuROXIdeQ=
 		</data>
 		<key>Modules/.DS_Store</key>
 		<data>
@@ -42,7 +42,7 @@
 		</data>
 		<key>Modules/NConnectFramework.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
 		<data>
-		AkG8bXX+8xvpqkLwA+CRG2fPRa0=
+		gbv4cXSr090e93zAemOJwbI23N0=
 		</data>
 		<key>Modules/NConnectFramework.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
@@ -50,11 +50,11 @@
 		</data>
 		<key>Modules/NConnectFramework.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
-		vRVr2HoR0huNaeJc7srfxYdTd8w=
+		XAVKxK4xtgcqQK7SFL7DyUZ7aiU=
 		</data>
 		<key>Modules/NConnectFramework.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		0XPpCMtBKL8ZZtRsd1DLIm4Xr44=
+		x3YtwJp+6oCSWcERhNUzsZBJy+w=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -102,7 +102,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			H5vf+44zwXaETy/qLcf3v0mYIG/P5fRjYCOffX69OTc=
+			2WFN2yX34/y1MJwijxAKf/4P+g/s0MmqcCyKVWgcsVQ=
 			</data>
 		</dict>
 		<key>Modules/NConnectFramework.swiftmodule/arm64-apple-ios.abi.json</key>
@@ -116,14 +116,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			omoPCeL0Cmw+zxy/IyH2zNud0XSP+ejBSzgxMuN3O6s=
+			JyYY8zmBHOvDDq/bVXMfgUNuzqi7OAVzsRgsOsdMw6Q=
 			</data>
 		</dict>
 		<key>Modules/NConnectFramework.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			5XTro3cX/ERWmmPdiUxj70CopYNovNGBc5tALlg/4RQ=
+			pzFBWvOn5J8Rdvr95/p/wFP5x6cJA7v6gn5jUhFGXvA=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

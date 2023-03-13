@@ -127,7 +127,7 @@ public class SwiftTiaraNxtNConnectPlugin: NSObject, FlutterPlugin, FlutterStream
                 print(#"[TiaraNxtNConnectPlugin.swift-getRfidReader] Sorry we don't have support for make \#(make)"#)
                 return false
             } else {
-                let newRfidReader = try RfidFactory.getRfidReader(make: readerMake!, hostname: mac, license: "")
+                let newRfidReader = try RfidFactory.getRfidReader(make: readerMake!, hostname: mac, license: lic!)
                 stringToRfidReaderMap[mac] = newRfidReader
                 newRfidReader.registerListener(listener: getRfidEventListener(mac: mac))
                 return true
