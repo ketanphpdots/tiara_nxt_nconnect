@@ -47,5 +47,5 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation files('src/lib/nconnect-android-4.2.15.jar')
+    implementation files('src/lib/nconnect-android-4.2.16.jar')
 }
